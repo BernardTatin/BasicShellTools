@@ -1,0 +1,12 @@
+# editors/IDE
+.*.swp
+*.bak
+
+.project
+netbeans
+
+# archives
+*.gz
+*.tar
+*.bz2
+*.zip
