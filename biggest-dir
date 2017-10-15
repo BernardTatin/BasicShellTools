@@ -1,26 +1,30 @@
 #!/usr/bin/env bash
 
-bindir=$(cd $(dirname $0); pwd)
-source ${bindir}/include/common-bash.sh
+[ -z "${bindir}" ] && bindir=$(cd $(dirname $0); pwd)
+[ -f "${bindir}/include/common-bash.sh" ] && source ${bindir}/include/common-bash.sh
 
 function dohelp() {
   local exit_value=0
-  local error_message=''
-  case $# in
-    1)
+  local error_message=
+
+  case "$#" in
+    '1')
       exit_value=$1
       ;;
-    2)
+    '2')
       exit_value=$1
-      error_message=$2
+      shift
+      error_message="$@"
       ;;
   esac
   [ -n "$error_message" ] && \
-    echo "ERROR : $error_message" 1>&2
-  cat << DOHELP
+    echo "ERROR : @" 1>&2
+
+cat << DOHELP
 ${script_name} [-h|--help] : this message
 ${script_name} dir dir ... : search biggest directory in each of
-                             the dir 
+                             the dir
 DOHELP
-  exit exit_value
+
+  exit ${exit_value}
 }
