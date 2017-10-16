@@ -34,3 +34,25 @@ function get_tmp_file() {
     root_name=$1
   echo $(mktemp /tmp/${root_name}.XXXXXX)
 }
+
+function dohelp() {
+  local exit_value=0
+  local error_message=
+
+  case "$#" in
+    '1')
+      exit_value=$1
+      ;;
+    '2')
+      exit_value=$1
+      shift
+      error_message="$@"
+      ;;
+  esac
+  [ -n "$error_message" ] && \
+    echo "ERROR : @" 1>&2
+
+  /usr/bin/printf "${help_text}"
+
+  exit ${exit_value}
+}
