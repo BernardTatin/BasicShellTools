@@ -1,30 +1,29 @@
 #!/usr/bin/env bash
 
+# scrip name
+script_name=$(basename $0)
+# help text
+help_text="${script_name} [-h|--help] : this message
+${script_name} dir dir ... : search biggest directory in each of the dir\n"
+
+# directory where this script is
 [ -z "${bindir}" ] && bindir=$(cd $(dirname $0); pwd)
+# source tools
 [ -f "${bindir}/include/common-bash.sh" ] && source ${bindir}/include/common-bash.sh
 
-function dohelp() {
-  local exit_value=0
-  local error_message=
+# no parameters, show help
+[ $# -eq 0 ] && dohelp
+# parameters in -h, --help, show help
+case $1 in
+  -h|--help)
+    dohelp
+    ;;
+esac
 
-  case "$#" in
-    '1')
-      exit_value=$1
-      ;;
-    '2')
-      exit_value=$1
-      shift
-      error_message="$@"
-      ;;
-  esac
-  [ -n "$error_message" ] && \
-    echo "ERROR : @" 1>&2
-
-cat << DOHELP
-${script_name} [-h|--help] : this message
-${script_name} dir dir ... : search biggest directory in each of
-                             the dir
-DOHELP
-
-  exit ${exit_value}
-}
+# do the real work
+while [ $# -gt 0 ]
+do
+  current_dir=$1
+  shift
+  /usr/bin/printf "%-48s - $(du -sm ${current_dir}/* | sort -n | tail -1)\n" ${current_dir}
+done
