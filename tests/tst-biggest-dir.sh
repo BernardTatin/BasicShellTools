@@ -3,7 +3,6 @@
 bindir=$(cd $(dirname $0); pwd)
 cd ${bindir}
 source ../include/common-bash.sh
-# safe_source ../biggest-dir
 
 tst_help=$(get_tmp_file).sh
 
