@@ -7,7 +7,7 @@ help_text="${script_name} [-h|--help] : this message
 ${script_name} dir dir ... : search biggest directory in each of the dir\n"
 
 # directory where this script is
-[ -z "${bindir}" ] && bindir=$(cd $(dirname $0); pwd)
+[ -z "${bindir}" ] && bindir="$(cd $(dirname $0) || exit 1; pwd)"
 # source tools
 [ -f "${bindir}/include/common-bash.sh" ] && source ${bindir}/include/common-bash.sh
 
@@ -20,7 +20,7 @@ case $1 in
     ;;
 esac
 
-# do the real work
+# do the real work for each parameter
 while [ $# -gt 0 ]
 do
   current_dir="$1"
@@ -31,5 +31,5 @@ do
   else
     file_mask="${current_dir}"
   fi
-  /usr/bin/printf "%-48s - $(du -sm ${file_mask} | sort -n | tail -1)\n" ${current_dir}
+  /usr/bin/printf "%-48s - $(du -sm ${file_mask} 2> /dev/null | sort -n | tail -1)\n" ${current_dir}
 done
