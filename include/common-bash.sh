@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-script_name=$(basename $0)
-
-#!/usr/bin/env bash
+export script_name=$(basename $0)
 
 function onerror() {
     local exit_code=$1
     shift
-    local error_msg="$@"
+    local error_msg="$*"
 
     echo "ERROR: $error_msg" 1>&2
     exit $exit_code
@@ -32,7 +30,7 @@ function get_tmp_file() {
   local root_name='another-tmp-file'
   [ $# -gt 0 ] && \
     root_name=$1
-  echo $(mktemp /tmp/${root_name}.XXXXXX)
+  echo "$(mktemp /tmp/${root_name}.XXXXXX)"
 }
 
 function dohelp() {
@@ -46,7 +44,7 @@ function dohelp() {
     '2')
       exit_value=$1
       shift
-      error_message="$@"
+      error_message="$*"
       ;;
   esac
   [ -n "$error_message" ] && \
