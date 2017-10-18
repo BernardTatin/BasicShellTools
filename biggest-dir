@@ -32,8 +32,10 @@ do
   else
     file_mask="${current_dir}"
   fi
-  du_result=$(du -sm ${file_mask} 2> /dev/null | sort -n | tail -1 | tr '\t' ' ')
-  du_name="${du_result##* }"
-  du_size="${du_result%% *}"
+  du_result=$(du -sm ${file_mask} 2> /dev/null | sort -n | tail -1)
+  # for tabulations, see :
+  #   https://stackoverflow.com/questions/40709605/bash-parameter-substitution-replace-tab-with-space
+  du_name="${du_result##*$(printf '\t')}"
+  du_size="${du_result%%$(printf '\t')*}"
   /usr/bin/printf "%-48s - %8d Mo %s\n" "${current_dir}" "${du_size}" "${du_name}"
 done
