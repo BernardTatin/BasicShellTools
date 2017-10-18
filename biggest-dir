@@ -45,9 +45,11 @@ do
   # for tabulations, see :
   #   https://stackoverflow.com/questions/40709605/bash-parameter-substitution-replace-tab-with-space
   # get object name
-  du_name="${du_result##*$(printf '\t')}"
+  du_name="${du_result##*[[:blank:]]}"
+  # du_name="${du_result##*$(printf '\t')}"
   # get object size
-  du_size="${du_result%%$(printf '\t')*}"
+  du_size="${du_result%%[[:blank:]]*}"
+  # du_size="${du_result%%$(printf '\t')*}"
   # print the orresponding line
   ${PRINTF} "%-48s - %8d Mo %s\n" "${current_dir}" "${du_size}" "${du_name}"
 done
