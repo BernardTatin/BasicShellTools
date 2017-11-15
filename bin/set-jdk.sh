@@ -34,7 +34,7 @@ function select_jdk() {
 			jdk_dir=
 			;;
 	esac
-	# echo "jdk_dir <${jdk_dir}>"
+	echo "jdk_dir <${jdk_dir}>, version <${version}"
 	[ -n "${jdk_dir}" ] && \
 		export JAVA_HOME=${jdk_dir} && \
 		add_to_path ${JAVA_HOME}/bin
