@@ -1,12 +1,80 @@
-# editors/IDE
-.*.swp
+*.o
+*.a
 *.bak
+*.lib
+# watcom
+*.obj
+*.err
+*.sym
+*.map
+*.MAP
+*.mbr
+*.lk*
+# vc98
+*.ncb
+*.plg
+*.opt
+*.pdb
+*.idb
+*.ilk
+*.pch
+*.sbr
+*~
+*.exe
+# visual studio
+*.sln
+*.suo
+*.vcproj*
+Release/
+Debug/
 
-.project
-netbeans
+# visual code
+.vscode/
 
-# archives
+*.log
 *.gz
-*.tar
-*.bz2
-*.zip
+.*.swp
+bbclib-test
+*.kdev*
+*.layout
+<*
+*.plist
+.*project
+*.anjuta
+*.komodo*
+.*.prefs
+nbproject/
+.settings/org.eclipse.core.runtime.prefs
+bbclib-test.BSD
+bbclib-test.GNU
+*.cbr
+*.mk1
+bbclib.mk
+*.smp
+/.plastic/
+/objs*/
+/bbclib-test.GNU.*
+/analyze/
+bc5f/
+bc5o/
+*.\$*
+*.~*
+*.m[br]t
+*.DSW
+*.BAK
+/help
+/help/
+/BccW32.cfg
+/bc5lib.ide
+.zedstate
+
+# latex
+*.aux
+*.idx
+*.toc
+*.out
+*.bbl
+*.blg
+
+.nw.nw
+_noweb.nw

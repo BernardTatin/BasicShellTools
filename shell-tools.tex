@@ -1,0 +1,161 @@
+\documentclass{scrartcl}% ===> this file was generated automatically by noweave --- better not edit it
+
+\input{common/prelude.tex}
+
+\author{Bernard Tatin}
+\date{2017}
+\title{Basic Shell Tools, des outils en shell}
+\begin{document}
+
+%% \pagestyle{noweb}
+\maketitle
+\abstract{Voici des outils plus ou moins simples, écrits en shell \emph{bash} en général car il est certainement le plus répandu actuellement. Certains ne trouveront d'intérêt que pour moi tandis que d'autres pourront satisfaire un plus grand nombre de lecteurs.\\
+\\
+Le choix de `noweb` provient du simple fait que documentation et sources sont conçus en même temps.}
+
+\tableofcontents
+\part{introduction}
+
+L'arborescence des scripts est simple, nous avons un répertoire `bin` qui contient les scripts à exécuter, un répertoire `include` qui contient les scripts de configuration globale à sourcer. Le reste sert \emph{simplement} à gérer la documentation et les tests.
+
+\section{la licence}
+C'est la license du \emph{MIT} :
+\nwfilename{_noweb.nw}\nwbegincode{1}\sublabel{NW48t7P8-1BEsuV-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-1BEsuV-1}}}\moddef{license.sh~{\nwtagstyle{}\subpageref{NW48t7P8-1BEsuV-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwenddeflinemarkup
+## The MIT License (MIT)
+##
+## Copyright (c) 2017 Bernard Tatin
+##
+## Permission is hereby granted, free of charge, to any person obtaining a copy
+## of this software and associated documentation files (the "Software"), to deal
+## in the Software without restriction, including without limitation the rights
+## to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+## copies of the Software, and to permit persons to whom the Software is
+## furnished to do so, subject to the following conditions:
+##
+## The above copyright notice and this permission notice shall be included in all
+## copies or substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+## SOFTWARE.
+##
+\nwused{\\{NW48t7P8-231JFl-1}}\nwendcode{}\nwbegindocs{2}\nwdocspar
+
+\part{le répertoire `include`}
+
+Les fichiers de ce répertoire ne sont utiles que lorsqu'ils sont \emph{sourcés}, soit depuis un shell interactif, soit depuis un script. Pour les shells interactifs, il est conseillé de bien vérifier que tout ce qui est nécessaire est bien exporté.
+
+\section{le fichier `common-bash.bash`}
+Pour le moment, c'est le seul fichier. Il permet d'exporter une variable, le nom du script :
+\nwenddocs{}\nwbegincode{3}\sublabel{NW48t7P8-2P4XCZ-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}}\moddef{common-bash variable~{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwenddeflinemarkup
+export script_name=$(basename $0)
+\nwused{\\{NW48t7P8-231JFl-1}}\nwendcode{}\nwbegindocs{4}\nwdocspar
+
+Ensuite, nous avons une série de fonctions très utiles:
+\nwenddocs{}\nwbegincode{5}\sublabel{NW48t7P8-2KJFr5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\moddef{common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwenddeflinemarkup
+function onerror() \{
+    local exit_code=$1
+    shift
+    local error_msg="$*"
+
+    echo "ERROR: $error_msg" 1>&2
+    exit $exit_code
+\}
+
+function safe_source() \{
+  local file=
+  while [ $# -gt 0 ]
+  do
+  file=$1
+    if [ -f $\{file\} ]
+    then
+      source $\{file\}
+    else
+      onerror 1 "Cannot source $\{file\}"
+    fi
+    shift
+  done
+\}
+
+function get_tmp_file() \{
+  local root_name='another-tmp-file'
+  [ $# -gt 0 ] && \\
+    root_name=$1
+  $(mktemp /tmp/$\{root_name\}.XXXXXX)
+\}
+
+function dohelp() \{
+  local exit_value=0
+  local error_message=
+
+  case "$#" in
+    '1')
+      exit_value=$1
+      ;;
+    '2')
+      exit_value=$1
+      shift
+      error_message="$*"
+      ;;
+  esac
+  [ -n "$error_message" ] && \\
+    echo "ERROR : @" 1>&2
+
+  /usr/bin/printf "$\{help_text\}"
+
+  exit $\{exit_value\}
+\}
+\nwused{\\{NW48t7P8-231JFl-1}}\nwendcode{}\nwbegindocs{6}\nwdocspar
+
+Ce qui nous donne au final:
+\nwenddocs{}\nwbegincode{7}\sublabel{NW48t7P8-231JFl-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\moddef{common-bash.bash~{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+#!/usr/bin/env bash
+
+\LA{}license.sh~{\nwtagstyle{}\subpageref{NW48t7P8-1BEsuV-1}}\RA{}
+
+\LA{}common-bash variable~{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}\RA{}
+
+\LA{}common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}\RA{}
+\nwnotused{common-bash.bash}\nwendcode{}\nwbegindocs{8}\nwdocspar
+\part{annexes}
+\section{la ligne de commande}
+Pour obtenir le fichier \LaTeX{} et le code source, voici ce qu'il faut faire depuis un terminal :
+
+\nwenddocs{}\nwbegincode{9}\sublabel{NW48t7P8-2CUXU7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2CUXU7-1}}}\moddef{command-line~{\nwtagstyle{}\subpageref{NW48t7P8-2CUXU7-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+# fichier LaTeX
+noweave -delay -autodefs c -index rbuffer.nw > rbuffer.tex
+# fichier PDF
+pdflatex rbuffer.tex && \\
+  pdflatex rbuffer.tex && \\
+  pdflatex rbuffer.tex
+# le code source
+notangle rbuffer.nw > rbuffer.h
+\nwnotused{command-line}\nwendcode{}
+
+\nwixlogsorted{c}{{command-line}{NW48t7P8-2CUXU7-1}{\nwixd{NW48t7P8-2CUXU7-1}}}%
+\nwixlogsorted{c}{{common-bash functions}{NW48t7P8-2KJFr5-1}{\nwixd{NW48t7P8-2KJFr5-1}\nwixu{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{common-bash variable}{NW48t7P8-2P4XCZ-1}{\nwixd{NW48t7P8-2P4XCZ-1}\nwixu{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{common-bash.bash}{NW48t7P8-231JFl-1}{\nwixd{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{license.sh}{NW48t7P8-1BEsuV-1}{\nwixd{NW48t7P8-1BEsuV-1}\nwixu{NW48t7P8-231JFl-1}}}%
+\nwbegindocs{10}\nwdocspar
+L'option {\Tt{}-autodefs\ c\nwendquote} permet à {\Tt{}noweave\nwendquote} de déterminer lui-même les éléments du langage C. Sans cette option, dans le cadre de ce fichier, les définitions de {\Tt{}intro-bits\nwendquote} ne seraient pas visibles.
+
+\section{tables et index}
+\subsection{table des extraits de code}
+
+\begin{multicols}{2}
+\nowebchunks
+\end{multicols}
+
+\subsection{index}
+
+\begin{multicols}{2}
+\nowebindex
+\end{multicols}
+
+\end{document}
+\nwenddocs{}
