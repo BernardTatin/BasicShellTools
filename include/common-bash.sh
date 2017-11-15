@@ -30,7 +30,7 @@ function get_tmp_file() {
   local root_name='another-tmp-file'
   [ $# -gt 0 ] && \
     root_name=$1
-  echo "$(mktemp /tmp/${root_name}.XXXXXX)"
+  $(mktemp /tmp/${root_name}.XXXXXX)
 }
 
 function dohelp() {
