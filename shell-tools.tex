@@ -16,7 +16,7 @@ Le choix de `noweb` provient du simple fait que documentation et sources sont co
 \tableofcontents
 \part{introduction}
 
-L'arborescence des scripts est simple, nous avons un répertoire `bin` qui contient les scripts à exécuter, un répertoire `include` qui contient les scripts de configuration globale à sourcer. Le reste sert \emph{simplement} à gérer la documentation et les tests.
+L'arborescence des scripts est simple, nous avons un répertoire \texttt{bin} qui contient les scripts à exécuter, un répertoire \texttt{include} qui contient les scripts de configuration globale à sourcer. Le reste sert \emph{simplement} à gérer la documentation et les tests.
 
 \section{la licence}
 C'est la license du \emph{MIT} :
@@ -45,19 +45,22 @@ C'est la license du \emph{MIT} :
 ##
 \nwused{\\{NW48t7P8-231JFl-1}}\nwendcode{}\nwbegindocs{2}\nwdocspar
 
-\part{le répertoire `include`}
+\part{le répertoire \texttt{include}}
 
 Les fichiers de ce répertoire ne sont utiles que lorsqu'ils sont \emph{sourcés}, soit depuis un shell interactif, soit depuis un script. Pour les shells interactifs, il est conseillé de bien vérifier que tout ce qui est nécessaire est bien exporté.
 
-\section{le fichier `common-bash.bash`}
+\section{le fichier \texttt{common-bash.bash}}
+\subsection{les variables}
 Pour le moment, c'est le seul fichier. Il permet d'exporter une variable, le nom du script :
 \nwenddocs{}\nwbegincode{3}\sublabel{NW48t7P8-2P4XCZ-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}}\moddef{common-bash variable~{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwenddeflinemarkup
-export script_name=$(basename $0)
-\nwused{\\{NW48t7P8-231JFl-1}}\nwendcode{}\nwbegindocs{4}\nwdocspar
-
-Ensuite, nous avons une série de fonctions très utiles:
-\nwenddocs{}\nwbegincode{5}\sublabel{NW48t7P8-2KJFr5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\moddef{common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwenddeflinemarkup
-function onerror() \{
+export \nwlinkedidentc{script_name}{NW48t7P8-2P4XCZ-1}=$(basename $0)
+\nwindexdefn{\nwixident{script{\_}name}}{script:unname}{NW48t7P8-2P4XCZ-1}\eatline
+\nwused{\\{NW48t7P8-231JFl-1}}\nwidentdefs{\\{{\nwixident{script{\_}name}}{script:unname}}}\nwendcode{}\nwbegindocs{4}\nwdocspar
+\subsection{les fonctions}
+\subsubsection{\texttt{onerror}}
+Ensuite, nous avons une série de fonctions très utiles, bien entendu. Tout d'abord, la fonction \texttt{onerror} qui affiche un message sur la console d'erreur et force la fin du script. Ici, la redirection ne fonctionne pas avec \texttt{sh}.
+\nwenddocs{}\nwbegincode{5}\sublabel{NW48t7P8-2KJFr5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\moddef{common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwprevnextdefs{\relax}{NW48t7P8-2KJFr5-2}\nwenddeflinemarkup
+function \nwlinkedidentc{onerror}{NW48t7P8-2KJFr5-1}() \{
     local exit_code=$1
     shift
     local error_msg="$*"
@@ -65,7 +68,14 @@ function onerror() \{
     echo "ERROR: $error_msg" 1>&2
     exit $exit_code
 \}
+\nwindexdefn{\nwixident{onerror}}{onerror}{NW48t7P8-2KJFr5-1}\eatline
+\nwalsodefined{\\{NW48t7P8-2KJFr5-2}}\nwused{\\{NW48t7P8-231JFl-1}}\nwidentdefs{\\{{\nwixident{onerror}}{onerror}}}\nwendcode{}\nwbegindocs{6}Voici un exemple d'utilisation qui affiche \emph{ERROR: code 127.x, unknown database error} et force le script à sortir avec une valeur de retour de 2:
+\nwenddocs{}\nwbegincode{7}\sublabel{NW48t7P8-12NLao-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-12NLao-1}}}\moddef{onerror example~{\nwtagstyle{}\subpageref{NW48t7P8-12NLao-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+\nwlinkedidentc{onerror}{NW48t7P8-2KJFr5-1} 2 "ERROR: code 127.x, unknown database error"
+\nwnotused{onerror example}\nwidentuses{\\{{\nwixident{onerror}}{onerror}}}\nwindexuse{\nwixident{onerror}}{onerror}{NW48t7P8-12NLao-1}\nwendcode{}\nwbegindocs{8}\nwdocspar
 
+\subsubsection{les autres fonctions... à compléter}
+\nwenddocs{}\nwbegincode{9}\sublabel{NW48t7P8-2KJFr5-2}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-2}}}\moddef{common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwprevnextdefs{NW48t7P8-2KJFr5-1}{\relax}\nwenddeflinemarkup
 function safe_source() \{
   local file=
   while [ $# -gt 0 ]
@@ -75,7 +85,7 @@ function safe_source() \{
     then
       source $\{file\}
     else
-      onerror 1 "Cannot source $\{file\}"
+      \nwlinkedidentc{onerror}{NW48t7P8-2KJFr5-1} 1 "Cannot source $\{file\}"
     fi
     shift
   done
@@ -109,10 +119,10 @@ function dohelp() \{
 
   exit $\{exit_value\}
 \}
-\nwused{\\{NW48t7P8-231JFl-1}}\nwendcode{}\nwbegindocs{6}\nwdocspar
+\nwused{\\{NW48t7P8-231JFl-1}}\nwidentuses{\\{{\nwixident{onerror}}{onerror}}}\nwindexuse{\nwixident{onerror}}{onerror}{NW48t7P8-2KJFr5-2}\nwendcode{}\nwbegindocs{10}\nwdocspar
 
 Ce qui nous donne au final:
-\nwenddocs{}\nwbegincode{7}\sublabel{NW48t7P8-231JFl-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\moddef{common-bash.bash~{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+\nwenddocs{}\nwbegincode{11}\sublabel{NW48t7P8-231JFl-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\moddef{common-bash.bash~{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
 #!/usr/bin/env bash
 
 \LA{}license.sh~{\nwtagstyle{}\subpageref{NW48t7P8-1BEsuV-1}}\RA{}
@@ -120,29 +130,17 @@ Ce qui nous donne au final:
 \LA{}common-bash variable~{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}\RA{}
 
 \LA{}common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}\RA{}
-\nwnotused{common-bash.bash}\nwendcode{}\nwbegindocs{8}\nwdocspar
-\part{annexes}
-\section{la ligne de commande}
-Pour obtenir le fichier \LaTeX{} et le code source, voici ce qu'il faut faire depuis un terminal :
+\nwnotused{common-bash.bash}\nwendcode{}
 
-\nwenddocs{}\nwbegincode{9}\sublabel{NW48t7P8-2CUXU7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2CUXU7-1}}}\moddef{command-line~{\nwtagstyle{}\subpageref{NW48t7P8-2CUXU7-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
-# fichier LaTeX
-noweave -delay -autodefs c -index rbuffer.nw > rbuffer.tex
-# fichier PDF
-pdflatex rbuffer.tex && \\
-  pdflatex rbuffer.tex && \\
-  pdflatex rbuffer.tex
-# le code source
-notangle rbuffer.nw > rbuffer.h
-\nwnotused{command-line}\nwendcode{}
-
-\nwixlogsorted{c}{{command-line}{NW48t7P8-2CUXU7-1}{\nwixd{NW48t7P8-2CUXU7-1}}}%
-\nwixlogsorted{c}{{common-bash functions}{NW48t7P8-2KJFr5-1}{\nwixd{NW48t7P8-2KJFr5-1}\nwixu{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{common-bash functions}{NW48t7P8-2KJFr5-1}{\nwixd{NW48t7P8-2KJFr5-1}\nwixd{NW48t7P8-2KJFr5-2}\nwixu{NW48t7P8-231JFl-1}}}%
 \nwixlogsorted{c}{{common-bash variable}{NW48t7P8-2P4XCZ-1}{\nwixd{NW48t7P8-2P4XCZ-1}\nwixu{NW48t7P8-231JFl-1}}}%
 \nwixlogsorted{c}{{common-bash.bash}{NW48t7P8-231JFl-1}{\nwixd{NW48t7P8-231JFl-1}}}%
 \nwixlogsorted{c}{{license.sh}{NW48t7P8-1BEsuV-1}{\nwixd{NW48t7P8-1BEsuV-1}\nwixu{NW48t7P8-231JFl-1}}}%
-\nwbegindocs{10}\nwdocspar
-L'option {\Tt{}-autodefs\ c\nwendquote} permet à {\Tt{}noweave\nwendquote} de déterminer lui-même les éléments du langage C. Sans cette option, dans le cadre de ce fichier, les définitions de {\Tt{}intro-bits\nwendquote} ne seraient pas visibles.
+\nwixlogsorted{c}{{onerror example}{NW48t7P8-12NLao-1}{\nwixd{NW48t7P8-12NLao-1}}}%
+\nwixlogsorted{i}{{\nwixident{onerror}}{onerror}}%
+\nwixlogsorted{i}{{\nwixident{script{\_}name}}{script:unname}}%
+\nwbegindocs{12}\nwdocspar
+\part{annexes}
 
 \section{tables et index}
 \subsection{table des extraits de code}

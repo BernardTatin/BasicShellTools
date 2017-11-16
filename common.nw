@@ -1,6 +1,6 @@
 \part{introduction}
 
-L'arborescence des scripts est simple, nous avons un répertoire `bin` qui contient les scripts à exécuter, un répertoire `include` qui contient les scripts de configuration globale à sourcer. Le reste sert \emph{simplement} à gérer la documentation et les tests.
+L'arborescence des scripts est simple, nous avons un répertoire \texttt{bin} qui contient les scripts à exécuter, un répertoire \texttt{include} qui contient les scripts de configuration globale à sourcer. Le reste sert \emph{simplement} à gérer la documentation et les tests.
 
 \section{la licence}
 C'est la license du \emph{MIT} :
@@ -29,17 +29,20 @@ C'est la license du \emph{MIT} :
 ##
 @
 
-\part{le répertoire `include`}
+\part{le répertoire \texttt{include}}
 
 Les fichiers de ce répertoire ne sont utiles que lorsqu'ils sont \emph{sourcés}, soit depuis un shell interactif, soit depuis un script. Pour les shells interactifs, il est conseillé de bien vérifier que tout ce qui est nécessaire est bien exporté.
 
-\section{le fichier `common-bash.bash`}
+\section{le fichier \texttt{common-bash.bash}}
+\subsection{les variables}
 Pour le moment, c'est le seul fichier. Il permet d'exporter une variable, le nom du script :
 <<common-bash variable>>=
 export script_name=$(basename $0)
-@
+@ %def script_name
 
-Ensuite, nous avons une série de fonctions très utiles:
+\subsection{les fonctions}
+\subsubsection{\texttt{onerror}}
+Ensuite, nous avons une série de fonctions très utiles, bien entendu. Tout d'abord, la fonction \texttt{onerror} qui affiche un message sur la console d'erreur et force la fin du script. Ici, la redirection ne fonctionne pas avec \texttt{sh}.
 <<common-bash functions>>=
 function onerror() {
     local exit_code=$1
@@ -49,7 +52,14 @@ function onerror() {
     echo "ERROR: $error_msg" 1>&2
     exit $exit_code
 }
+@ %def onerror
+Voici un exemple d'utilisation qui affiche \emph{ERROR: code 127.x, unknown database error} et force le script à sortir avec une valeur de retour de 2:
+<<onerror example>>=
+onerror 2 "ERROR: code 127.x, unknown database error"
+@
 
+\subsubsection{les autres fonctions... à compléter}
+<<common-bash functions>>=
 function safe_source() {
   local file=
   while [ $# -gt 0 ]

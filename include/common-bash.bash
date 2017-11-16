@@ -33,7 +33,6 @@ function onerror() {
     echo "ERROR: $error_msg" 1>&2
     exit $exit_code
 }
-
 function safe_source() {
   local file=
   while [ $# -gt 0 ]
