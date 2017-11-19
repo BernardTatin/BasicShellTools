@@ -7,6 +7,7 @@
 \let\it\itshape
 \let\rm\rmfamily
 
+\usepackage[nodayofweek]{datetime}
 \usepackage{boolexpr,pdftexcmds,trace}
 \usepackage{multicol}
 
@@ -16,8 +17,9 @@
 \automark[section]{section}
 \cfoot[\pagemark]{\pagemark}
 %% for date/time
-\usepackage{scrdate}
-\usepackage{scrtime}
+% \usepackage{scrdate}
+% \usepackage{scrtime}
+
 
 %% package for noweb
 \usepackage{common/newnoweb}
@@ -25,10 +27,8 @@
 
 %% fonts and encoding
 \usepackage[T1]{fontenc}
-%\usepackage[default]{gillius}
 \usepackage[condensed,sfdefault]{universalis}
 \usepackage{CormorantGaramond}
-% \usepackage{quattrocento}
 \usepackage[zerostyle=d]{newtxtt}
 \renewcommand{\familydefault}{\rmdefault}
 
@@ -57,136 +57,80 @@
   linktocpage
 }
 
-%% a better abstract (I hope...)
-\renewenvironment{abstract}[1]{%
-  \hfill
-  \begin{minipage}
-    {0.95\textwidth}
-    \rule{\textwidth}{1pt}
-    \footnotesize
-    #1\footnote{Document crée le \today à \thistime}
-    \normalsize
-    {%
-      \par\noindent
-      \rule{\textwidth}{1pt}
-    }
-  \end{minipage}
-  \clearpage
-}
-%% format des paragraphes
-%% \setlength{\parindent}{0cm}
-%% \setlength{\parskip}{4mm}
-%% \linespread{1.1}
-%% \let\nwdocspar=\smallbreak
-
-%% better itemize
-\newenvironment{packed_itemize}{
-\begin{itemize}
-  \setlength{\itemsep}{0pt}
-  \setlength{\parskip}{0pt}
-  \setlength{\parsep}{0pt}
-}{\end{itemize}}
-
 \renewcommand{\thesection}{\thepart.\arabic{section}}
 % from : https://tex.stackexchange.com/questions/245979/numberwithinequationsubsection-fails-for-subsections-0
-% reset section counter at each part
-\makeatletter
-\@addtoreset{section}{part}
-\makeatother
 %% from https://tex.stackexchange.com/questions/192838/part-heading-style?rq=1
 \newcommand{\addtocontenttable}[4]{%
   \refstepcounter{#1}%
   \addcontentsline{toc}{#1}{#2\hspace{#3}#4}%
-  % pour les entêtes de page
-  % \markboth{}{}%
-  % \reset@font
-  % \parindent \z@
-  % \vspace*{10\p@}%
 }
 
-%% for vbox, see https://tex.stackexchange.com/questions/83930/what-are-the-different-kinds-of-boxes-in-latex
+%% parameters :
+%   1 -> text style (\Huge\bfseries for part, \Large\bfseries for sections...)
+%   2 -> the counter (\thepart, \thesection{arg} ...)
+%   3 -> position above baseline (-4cm for the part, -1.5cm for sections)
+\newcommand{\boxforcount}[3]{%
+  \begin{minipage}{7mm}
+    \begin{tabular}{@{}p{7mm}@{}}
+      \makebox[7mm]{%
+        \cellcolor{orange}\color{white}
+        #1
+        \strut
+        #2
+        \rule[#3]{0pt}{4cm}
+      }%
+    \end{tabular}%
+  \end{minipage}
+}
+
+% reset section counter at each part
 \makeatletter
+\@addtoreset{section}{part}
+
+%% for vbox, see https://tex.stackexchange.com/questions/83930/what-are-the-different-kinds-of-boxes-in-latex
 \def\@part[#1]#2{%
 \cleardoublepage
   \addtocontenttable{part}{\thepart}{1em}{#1}
   \mbox{%
-    \begin{minipage}{7mm}
-      \begin{tabular}{@{}p{7mm}@{}}
-        \makebox[7mm]{\cellcolor{orange}\Huge\color{white}\bfseries\strut\thepart\rule[-4cm]{0pt}{4cm}}%
-      \end{tabular}%
-    \end{minipage}
-    \kern-2pt
-    \begin{minipage}{170mm}
+    \boxforcount{\Huge\bfseries}{\thepart}{-4cm}
+    \kern-3pt
+    \begin{minipage}{140mm}
        \tabular[t]{@{}p{1cm}p{\dimexpr\hsize-2.1cm}@{}}\hline
-          & \Huge\bfseries\itshape\rule{0pt}{1.5\ht\strutbox}#1\endtabular
+          & \Huge\bfseries\itshape\rule{0pt}{1.5\ht\strutbox}
+          #1
+          \endtabular
     \end{minipage}
     } %% mbox
   % \cleardoublepage
  \vskip 100\p@
 } %% \def\@part
-\makeatother
 
-\makeatletter
-\def\@section[#1]#2{%
-% \newcommand{\section}[2]{%
-  \cleardoublepage
-  \addtocontenttable{section}{\thesection}{3em}{#1}
-  \mbox{%
-    \begin{minipage}{7mm}
-      \begin{tabular}{@{}p{7mm}@{}}
-        \makebox[7mm]{\cellcolor{orange}\Large\color{white}\bfseries\strut\thesection{}\rule[-4cm]{0pt}{4cm}}%
-      \end{tabular}%
-    \end{minipage}
-    \kern-2pt
-    \begin{minipage}{170mm}
-       \tabular[t]{@{}p{1cm}p{\dimexpr\hsize-2.1cm}@{}}\hline
-          & \Large\bfseries\itshape\rule{0pt}{1.5\ht\strutbox}#1\endtabular
-    \end{minipage}
-    } %% mbox
-%  \vskip 100\p@
-} %% \def\@section
-\makeatother
 
-\makeatletter
+
 \long\def\isequal#1#2{\pdf@strcmp{#1}{#2}}
-\makeatother
 
 %% colorized sections
 \setkomafont{section}{\mysection}
 \newcommand{\mysection}[1]{%
-    \LARGE\sffamily\bfseries%
-    \color{white}%
-    \setlength{\fboxsep}{0cm}%already boxed
   \mbox{%
-    \begin{minipage}{7mm}
-      \begin{tabular}{@{}p{7mm}@{}}
-        \makebox[7mm]{\cellcolor{orange}\Large\color{white}\bfseries\strut
-        \switch
-          \case{\isequal{\thesection}{.0}}
-            {}
-          \otherwise
-            \thesection{}
-        \endswitch
-        \rule[-1.5cm]{0pt}{4cm}}%
-      \end{tabular}%
-    \end{minipage}
-    \kern-2pt
-    \begin{minipage}{170mm}
+    \boxforcount{\Large\bfseries}{%
+      \switch
+        \case{\isequal{\thesection}{.0}}
+          {}
+        \otherwise
+          \thesection{}
+      \endswitch
+    }{-1.5cm}
+    \kern-3pt
+    \begin{minipage}{140mm}
       \color{mygray}
        \tabular[t]{@{}p{1cm}p{\dimexpr\hsize-2.1cm}@{}}\hline
-          & \Large\bfseries\itshape\rule{0pt}{1.5\ht\strutbox}#1\endtabular
+          & \Large\bfseries\itshape\rule{0pt}{1.5\ht\strutbox}
+          #1
+          \endtabular
     \end{minipage}
-    } %% mbox
-    % \colorbox{orange!80}{%
-    %     \begin{minipage}{\linewidth}%
-    %         \vspace*{4pt}%Space before
-    %         \hspace*{3pt}
-    %         #1
-    %         \vspace*{4pt}%Space after
-    %     \end{minipage}%
-    %     % \ohead{#1}
-    % }
     }
+}
 
 %% colorized subsections
 \setkomafont{subsection}{\submysection}
@@ -217,3 +161,6 @@
             \vspace*{4pt}%Space after
         \end{minipage}%
     }}
+
+\makeatother
+\input{common/environments}
