@@ -1,7 +1,33 @@
-%% prelude.tex
+% ======================================================================
+% prelude.tex
+% initialisation
+% ======================================================================
+% MIT License
+%
+% Copyright (c) 2017 Bernard Tatin
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+% ======================================================================
 %% https://tex.stackexchange.com/questions/36609/formatting-section-titles
 %% KOMA needs it
 \let\sf\sffamily
+
 \let\bf\bfseries
 \let\tt\ttfamily
 \let\it\itshape
@@ -58,110 +84,53 @@
   linktocpage
 }
 
-\renewcommand{\thesection}{\thepart.\arabic{section}}
-% from : https://tex.stackexchange.com/questions/245979/numberwithinequationsubsection-fails-for-subsections-0
-%% from https://tex.stackexchange.com/questions/192838/part-heading-style?rq=1
-\newcommand{\addtocontenttable}[4]{%
-  \refstepcounter{#1}%
-  \addcontentsline{toc}{#1}{#2\hspace{#3}#4}%
+% \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{caption}
+% \usepackage{boxhandler}
+\usepackage{wrapfig}
+
+\newcommand\rawpicture[4]{%
+	\begin{figure}[h!]
+		\begin{center}
+      \includegraphics[width=0.4\textwidth]{#1}
+    \end{center}
+    \caption{\emph{#2} (#4) \\
+    \footnotesize Source: #3}
+	\end{figure}
 }
 
-%% parameters :
-%   1 -> text style (\Huge\bfseries for part, \Large\bfseries for sections...)
-%   2 -> the counter (\thepart, \thesection{arg} ...)
-%   3 -> position above baseline (-4cm for the part, -1.5cm for sections)
-\newcommand{\boxforcount}[3]{%
-  \begin{minipage}{7mm}
-    \begin{tabular}{@{}p{7mm}@{}}
-      \makebox[7mm]{%
-        \cellcolor{orange}\color{white}
-        #1
-        \strut
-        #2
-        \rule[#3]{0pt}{4cm}
-      }%
-    \end{tabular}%
-  \end{minipage}
+\newcommand\nicepicture[4]{%
+	\begin{wrapfigure}{#4}{0.45\textwidth}
+		\begin{center}
+      \includegraphics[width=0.4\textwidth]{#1}
+    \end{center}
+    \caption{\emph{#2} (#4) \\
+    \footnotesize Source: #3}
+	\end{wrapfigure}
 }
 
-% reset section counter at each part
-\makeatletter
-\@addtoreset{section}{part}
-
-%% for vbox, see https://tex.stackexchange.com/questions/83930/what-are-the-different-kinds-of-boxes-in-latex
-\def\@part[#1]#2{%
-\cleardoublepage
-  \addtocontenttable{part}{\thepart}{1em}{#1}
-  \mbox{%
-    \boxforcount{\Huge\bfseries}{\thepart}{-4cm}
-    \kern-3pt
-    \begin{minipage}{140mm}
-       \tabular[t]{@{}p{1cm}p{\dimexpr\hsize-2.1cm}@{}}\hline
-          & \Huge\bfseries\itshape\rule{0pt}{1.5\ht\strutbox}
-          #1
-          \endtabular
-    \end{minipage}
-    } %% mbox
-  % \cleardoublepage
- \vskip 100\p@
-} %% \def\@part
-
-
-
-\long\def\isequal#1#2{\pdf@strcmp{#1}{#2}}
-
-%% colorized sections
-\setkomafont{section}{\mysection}
-\newcommand{\mysection}[1]{%
-  \mbox{%
-    \boxforcount{\Large\bfseries}{%
-      \switch
-        \case{\isequal{\thesection}{.0}}
-          {}
-        \otherwise
-          \thesection{}
-      \endswitch
-    }{-1.5cm}
-    \kern-3pt
-    \begin{minipage}{140mm}
-      \color{mygray}
-       \tabular[t]{@{}p{1cm}p{\dimexpr\hsize-2.1cm}@{}}\hline
-          & \Large\bfseries\itshape\rule{0pt}{1.5\ht\strutbox}
-          #1
-          \endtabular
-    \end{minipage}
-    }
+\newcommand\leftpicture[3]{%
+  \nicepicture{#1}{#2}{#3}{l}
+	% \begin{wrapfigure}{L}{0.45\textwidth}
+	% 	\centering
+	% 	\includegraphics[width=0.9\linewidth]{#1}
+	% 	\caption{\emph{#2} \\
+	% 	\footnotesize Source: #3}
+	% \end{wrapfigure}
 }
 
-%% colorized subsections
-\setkomafont{subsection}{\submysection}
-\newcommand{\submysection}[1]{%
-    \large\sffamily%
-    \color{white}%
-    \setlength{\fboxsep}{0cm}%already boxed
-    \colorbox{orange!80}{%
-        \begin{minipage}{\linewidth}%
-            \vspace*{4pt}%Space before
-            \hspace*{3pt}
-            #1
-            \vspace*{4pt}%Space after
-        \end{minipage}%
-    }}
+%% #1 : fichier image
+%% #2 : caption
+%% #3 : la source
+\newcommand\rightpicture[3]{%
+  \nicepicture{#1}{#2}{#3}{r}
+	% \begin{wrapfigure}{R}{0.45\textwidth}
+	% 	\includegraphics[width=0.9\linewidth]{#1}
+	% 	\caption{\emph{#2} \\
+	% 	\footnotesize Source: #3}
+	% \end{wrapfigure}
+}
 
-%% colorized subsubsections
-\setkomafont{subsubsection}{\subsubmysection}
-\newcommand{\subsubmysection}[1]{%
-    \itshape\sffamily%
-    \color{white}%
-    \setlength{\fboxsep}{0cm}%already boxed
-    \colorbox{orange!80}{%
-        \begin{minipage}{\linewidth}%
-            \vspace*{4pt}%Space before
-            \hspace*{3pt}
-            #1
-            \vspace*{4pt}%Space after
-        \end{minipage}%
-    }}
 
-\makeatother
 \input{common/environments}
+\input{common/sectioning}
