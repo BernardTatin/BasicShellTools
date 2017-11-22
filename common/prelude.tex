@@ -84,6 +84,53 @@
   linktocpage
 }
 
+% \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{caption}
+% \usepackage{boxhandler}
+\usepackage{wrapfig}
+
+\newcommand\rawpicture[4]{%
+	\begin{figure}[h!]
+		\begin{center}
+      \includegraphics[width=0.4\textwidth]{#1}
+    \end{center}
+    \caption{\emph{#2} (#4) \\
+    \footnotesize Source: #3}
+	\end{figure}
+}
+
+\newcommand\nicepicture[4]{%
+	\begin{wrapfigure}{#4}{0.45\textwidth}
+		\begin{center}
+      \includegraphics[width=0.4\textwidth]{#1}
+    \end{center}
+    \caption{\emph{#2} (#4) \\
+    \footnotesize Source: #3}
+	\end{wrapfigure}
+}
+
+\newcommand\leftpicture[3]{%
+  \nicepicture{#1}{#2}{#3}{l}
+	% \begin{wrapfigure}{L}{0.45\textwidth}
+	% 	\centering
+	% 	\includegraphics[width=0.9\linewidth]{#1}
+	% 	\caption{\emph{#2} \\
+	% 	\footnotesize Source: #3}
+	% \end{wrapfigure}
+}
+
+%% #1 : fichier image
+%% #2 : caption
+%% #3 : la source
+\newcommand\rightpicture[3]{%
+  \nicepicture{#1}{#2}{#3}{r}
+	% \begin{wrapfigure}{R}{0.45\textwidth}
+	% 	\includegraphics[width=0.9\linewidth]{#1}
+	% 	\caption{\emph{#2} \\
+	% 	\footnotesize Source: #3}
+	% \end{wrapfigure}
+}
+
 
 \input{common/environments}
 \input{common/sectioning}
