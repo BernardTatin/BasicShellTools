@@ -1,0 +1,99 @@
+% ======================================================================
+% environment.tex
+% definition of nice environments
+% ======================================================================
+% MIT License
+%
+% Copyright (c) 2017 Bernard Tatin
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+% ======================================================================
+
+
+% french date format
+\newdateformat{mydate}{\twodigit{\THEDAY}{/}\twodigit{\THEMONTH}{/}\THEYEAR}
+
+%% The following environments are based on the same presentation
+%% here we have the begining and the end
+\newcommand{\opennote}[1]{%
+  \hfill
+  \begin{minipage}
+    {0.95\textwidth}
+    \rule{\textwidth}{1pt}
+    \paragraph{\textbf{#1.}}
+}
+\newcommand{\closenote}{%
+    \par\noindent
+    %\rule{\textwidth}{1pt}
+  \end{minipage}
+  \\
+  \\
+
+}
+
+%% basic environment note
+\newenvironment{note}[1]{%
+  \opennote{#1}
+}{%
+  \closenote
+}
+
+\newcommand{\ecaption}[1]{%
+  \addcontentsline{xmp}{definition}{#1}
+}
+\makeatletter
+\newcommand{\listofdefinitions}{%
+  \section{Définitions}
+
+  \begin{multicols}{2}
+    \@starttoc{xmp}
+  \end{multicols}
+}
+\newcommand\l@definition[2]{%
+  \par\noindent#1,~\textit{#2}\par
+}
+\makeatother
+%% definition counter
+\newcounter{definition}[section]
+%% definition
+\newenvironment{termdefinition}[1]{%
+  \refstepcounter{definition}
+  \ecaption{#1}
+  \opennote{Définition \thedefinition\ - #1}
+}{%
+  \closenote
+}
+
+\renewenvironment{abstract}[1]{%
+  \hfill
+  \begin{note}{Résumé}
+    \footnotesize
+    #1\footnote{Document crée le \mydate\today{} à \currenttime{}.}
+    \normalsize
+  \end{note}
+  \clearpage
+}
+
+%% better itemize
+\newenvironment{packed_itemize}{
+\begin{itemize}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{itemize}}

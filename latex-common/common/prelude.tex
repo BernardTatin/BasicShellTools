@@ -1,0 +1,136 @@
+% ======================================================================
+% prelude.tex
+% initialisation
+% ======================================================================
+% MIT License
+%
+% Copyright (c) 2017 Bernard Tatin
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+% ======================================================================
+%% https://tex.stackexchange.com/questions/36609/formatting-section-titles
+%% KOMA needs it
+\let\sf\sffamily
+
+\let\bf\bfseries
+\let\tt\ttfamily
+\let\it\itshape
+\let\rm\rmfamily
+
+\usepackage[nodayofweek]{datetime}
+\usepackage{boolexpr,pdftexcmds,trace}
+\usepackage{multicol}
+
+%% KOMA for headers :
+\usepackage{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\automark[section]{section}
+\cfoot[\pagemark]{\pagemark}
+%% for date/time
+% \usepackage{scrdate}
+% \usepackage{scrtime}
+
+\usepackage{xifthen}% provides \isempty test
+
+%% package for noweb
+\usepackage{common/newnoweb}
+\noweboptions{smallcode,longchunks,longxref}
+
+%% fonts and encoding
+\usepackage[T1]{fontenc}
+\usepackage[condensed,sfdefault]{universalis}
+\usepackage{CormorantGaramond}
+\usepackage[zerostyle=d]{newtxtt}
+\renewcommand{\familydefault}{\rmdefault}
+
+\usepackage[utf8]{inputenc}
+% Babel for French is known to break KOMA scripts
+% \usepackage[french]{babel}
+
+%% packages needed for section coloring
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+
+%% hyperlinks initialisation
+\definecolor{mygray}{rgb}{0.4,0.4,0.4}
+\usepackage[bookmarks,backref=page,linkcolor=mygray]{hyperref} %,colorlinks
+\hypersetup{%
+  pdfauthor = {Bernard Tatin},
+  pdftitle = {},
+  pdfsubject = {},
+  pdfkeywords = {},
+  colorlinks=true,
+  linkcolor= mygray,
+  citecolor= black,
+  pageanchor=true,
+  urlcolor = mygray,
+  plainpages = false,
+  linktocpage
+}
+
+% \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{caption}
+% \usepackage{boxhandler}
+\usepackage{wrapfig}
+
+\newcommand\rawpicture[4]{%
+	\begin{figure}[h!]
+		\begin{center}
+      \includegraphics[width=0.4\textwidth]{#1}
+    \end{center}
+    \caption{\emph{#2} (#4) \\
+    \footnotesize Source: #3}
+	\end{figure}
+}
+
+\newcommand\nicepicture[4]{%
+	\begin{wrapfigure}{#4}{0.45\textwidth}
+		\begin{center}
+      \includegraphics[width=0.4\textwidth]{#1}
+    \end{center}
+    \caption{\emph{#2} (#4) \\
+    \footnotesize Source: #3}
+	\end{wrapfigure}
+}
+
+\newcommand\leftpicture[3]{%
+  \nicepicture{#1}{#2}{#3}{l}
+	% \begin{wrapfigure}{L}{0.45\textwidth}
+	% 	\centering
+	% 	\includegraphics[width=0.9\linewidth]{#1}
+	% 	\caption{\emph{#2} \\
+	% 	\footnotesize Source: #3}
+	% \end{wrapfigure}
+}
+
+%% #1 : fichier image
+%% #2 : caption
+%% #3 : la source
+\newcommand\rightpicture[3]{%
+  \nicepicture{#1}{#2}{#3}{r}
+	% \begin{wrapfigure}{R}{0.45\textwidth}
+	% 	\includegraphics[width=0.9\linewidth]{#1}
+	% 	\caption{\emph{#2} \\
+	% 	\footnotesize Source: #3}
+	% \end{wrapfigure}
+}
+
+
+\input{common/environments}
+\input{common/sectioning}

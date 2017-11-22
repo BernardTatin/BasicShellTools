@@ -1,0 +1,159 @@
+\documentclass{scrartcl}% ===> this file was generated automatically by noweave --- better not edit it
+
+\input{common/prelude.tex}
+
+\author{Bernard Tatin}
+\date{2017}
+\title{Basic Shell Tools, des outils en shell}
+\begin{document}
+
+%% \pagestyle{noweb}
+\maketitle
+\abstract{Voici des outils plus ou moins simples, écrits en shell \emph{bash} en général car il est certainement le plus répandu actuellement. Certains ne trouveront d'intérêt que pour moi tandis que d'autres pourront satisfaire un plus grand nombre de lecteurs.\\
+\\
+Le choix de `noweb` provient du simple fait que documentation et sources sont conçus en même temps.}
+
+\tableofcontents
+\part{introduction}
+
+L'arborescence des scripts est simple, nous avons un répertoire \texttt{bin} qui contient les scripts à exécuter, un répertoire \texttt{include} qui contient les scripts de configuration globale à sourcer. Le reste sert \emph{simplement} à gérer la documentation et les tests.
+
+\section{la licence}
+C'est la license du \emph{MIT} :
+\nwfilename{_noweb.nw}\nwbegincode{1}\sublabel{NW48t7P8-1BEsuV-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-1BEsuV-1}}}\moddef{license.sh~{\nwtagstyle{}\subpageref{NW48t7P8-1BEsuV-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwenddeflinemarkup
+## The MIT License (MIT)
+##
+## Copyright (c) 2017 Bernard Tatin
+##
+## Permission is hereby granted, free of charge, to any person obtaining a copy
+## of this software and associated documentation files (the "Software"), to deal
+## in the Software without restriction, including without limitation the rights
+## to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+## copies of the Software, and to permit persons to whom the Software is
+## furnished to do so, subject to the following conditions:
+##
+## The above copyright notice and this permission notice shall be included in all
+## copies or substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+## SOFTWARE.
+##
+\nwused{\\{NW48t7P8-231JFl-1}}\nwendcode{}\nwbegindocs{2}\nwdocspar
+
+\part{le répertoire \texttt{include}}
+
+Les fichiers de ce répertoire ne sont utiles que lorsqu'ils sont \emph{sourcés}, soit depuis un shell interactif, soit depuis un script. Pour les shells interactifs, il est conseillé de bien vérifier que tout ce qui est nécessaire est bien exporté.
+
+\section{le fichier \texttt{common-bash.bash}}
+\subsection{les variables}
+Pour le moment, c'est le seul fichier. Il permet d'exporter une variable, le nom du script :
+\nwenddocs{}\nwbegincode{3}\sublabel{NW48t7P8-2P4XCZ-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}}\moddef{common-bash variable~{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwenddeflinemarkup
+export \nwlinkedidentc{script_name}{NW48t7P8-2P4XCZ-1}=$(basename $0)
+\nwindexdefn{\nwixident{script{\_}name}}{script:unname}{NW48t7P8-2P4XCZ-1}\eatline
+\nwused{\\{NW48t7P8-231JFl-1}}\nwidentdefs{\\{{\nwixident{script{\_}name}}{script:unname}}}\nwendcode{}\nwbegindocs{4}\nwdocspar
+\subsection{les fonctions}
+\subsubsection{\texttt{onerror}}
+Ensuite, nous avons une série de fonctions très utiles, bien entendu. Tout d'abord, la fonction \texttt{onerror} qui affiche un message sur la console d'erreur et force la fin du script. Ici, la redirection ne fonctionne pas avec \texttt{sh}.
+\nwenddocs{}\nwbegincode{5}\sublabel{NW48t7P8-2KJFr5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\moddef{common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwprevnextdefs{\relax}{NW48t7P8-2KJFr5-2}\nwenddeflinemarkup
+function \nwlinkedidentc{onerror}{NW48t7P8-2KJFr5-1}() \{
+    local exit_code=$1
+    shift
+    local error_msg="$*"
+
+    echo "ERROR: $error_msg" 1>&2
+    exit $exit_code
+\}
+\nwindexdefn{\nwixident{onerror}}{onerror}{NW48t7P8-2KJFr5-1}\eatline
+\nwalsodefined{\\{NW48t7P8-2KJFr5-2}}\nwused{\\{NW48t7P8-231JFl-1}}\nwidentdefs{\\{{\nwixident{onerror}}{onerror}}}\nwendcode{}\nwbegindocs{6}Voici un exemple d'utilisation qui affiche \emph{ERROR: code 127.x, unknown database error} et force le script à sortir avec une valeur de retour de 2:
+\nwenddocs{}\nwbegincode{7}\sublabel{NW48t7P8-12NLao-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-12NLao-1}}}\moddef{onerror example~{\nwtagstyle{}\subpageref{NW48t7P8-12NLao-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+\nwlinkedidentc{onerror}{NW48t7P8-2KJFr5-1} 2 "ERROR: code 127.x, unknown database error"
+\nwnotused{onerror example}\nwidentuses{\\{{\nwixident{onerror}}{onerror}}}\nwindexuse{\nwixident{onerror}}{onerror}{NW48t7P8-12NLao-1}\nwendcode{}\nwbegindocs{8}\nwdocspar
+
+\subsubsection{les autres fonctions... à compléter}
+\nwenddocs{}\nwbegincode{9}\sublabel{NW48t7P8-2KJFr5-2}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-2}}}\moddef{common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}}\plusendmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NW48t7P8-231JFl-1}}\nwprevnextdefs{NW48t7P8-2KJFr5-1}{\relax}\nwenddeflinemarkup
+function safe_source() \{
+  local file=
+  while [ $# -gt 0 ]
+  do
+  file=$1
+    if [ -f $\{file\} ]
+    then
+      source $\{file\}
+    else
+      \nwlinkedidentc{onerror}{NW48t7P8-2KJFr5-1} 1 "Cannot source $\{file\}"
+    fi
+    shift
+  done
+\}
+
+function get_tmp_file() \{
+  local root_name='another-tmp-file'
+  [ $# -gt 0 ] && \\
+    root_name=$1
+  $(mktemp /tmp/$\{root_name\}.XXXXXX)
+\}
+
+function dohelp() \{
+  local exit_value=0
+  local error_message=
+
+  case "$#" in
+    '1')
+      exit_value=$1
+      ;;
+    '2')
+      exit_value=$1
+      shift
+      error_message="$*"
+      ;;
+  esac
+  [ -n "$error_message" ] && \\
+    echo "ERROR : @" 1>&2
+
+  /usr/bin/printf "$\{help_text\}"
+
+  exit $\{exit_value\}
+\}
+\nwused{\\{NW48t7P8-231JFl-1}}\nwidentuses{\\{{\nwixident{onerror}}{onerror}}}\nwindexuse{\nwixident{onerror}}{onerror}{NW48t7P8-2KJFr5-2}\nwendcode{}\nwbegindocs{10}\nwdocspar
+
+Ce qui nous donne au final:
+\nwenddocs{}\nwbegincode{11}\sublabel{NW48t7P8-231JFl-1}\nwmargintag{{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\moddef{common-bash.bash~{\nwtagstyle{}\subpageref{NW48t7P8-231JFl-1}}}\endmoddef\nwstartdeflinemarkup\nwenddeflinemarkup
+#!/usr/bin/env bash
+
+\LA{}license.sh~{\nwtagstyle{}\subpageref{NW48t7P8-1BEsuV-1}}\RA{}
+
+\LA{}common-bash variable~{\nwtagstyle{}\subpageref{NW48t7P8-2P4XCZ-1}}\RA{}
+
+\LA{}common-bash functions~{\nwtagstyle{}\subpageref{NW48t7P8-2KJFr5-1}}\RA{}
+\nwnotused{common-bash.bash}\nwendcode{}
+
+\nwixlogsorted{c}{{common-bash functions}{NW48t7P8-2KJFr5-1}{\nwixd{NW48t7P8-2KJFr5-1}\nwixd{NW48t7P8-2KJFr5-2}\nwixu{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{common-bash variable}{NW48t7P8-2P4XCZ-1}{\nwixd{NW48t7P8-2P4XCZ-1}\nwixu{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{common-bash.bash}{NW48t7P8-231JFl-1}{\nwixd{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{license.sh}{NW48t7P8-1BEsuV-1}{\nwixd{NW48t7P8-1BEsuV-1}\nwixu{NW48t7P8-231JFl-1}}}%
+\nwixlogsorted{c}{{onerror example}{NW48t7P8-12NLao-1}{\nwixd{NW48t7P8-12NLao-1}}}%
+\nwixlogsorted{i}{{\nwixident{onerror}}{onerror}}%
+\nwixlogsorted{i}{{\nwixident{script{\_}name}}{script:unname}}%
+\nwbegindocs{12}\nwdocspar
+\part{annexes}
+
+\section{tables et index}
+\subsection{table des extraits de code}
+
+\begin{multicols}{2}
+\nowebchunks
+\end{multicols}
+
+\subsection{index}
+
+\begin{multicols}{2}
+\nowebindex
+\end{multicols}
+
+\end{document}
+\nwenddocs{}

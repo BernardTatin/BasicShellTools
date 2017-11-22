@@ -75,6 +75,7 @@ bc5o/
 *.out
 *.bbl
 *.blg
+*.xmp
 
 .nw.nw
 _noweb.nw
