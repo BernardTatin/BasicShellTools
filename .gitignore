@@ -28,6 +28,7 @@
 Release/
 Debug/
 
+*pipo*
 # visual code
 .vscode/
 
@@ -44,6 +45,7 @@ bbclib-test
 *.komodo*
 .*.prefs
 nbproject/
+.anjuta_sym_db.db
 .settings/org.eclipse.core.runtime.prefs
 bbclib-test.BSD
 bbclib-test.GNU

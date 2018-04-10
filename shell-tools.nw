@@ -11,6 +11,6 @@
 \maketitle
 \abstract{Voici des outils plus ou moins simples, écrits en shell \emph{bash} en général car il est certainement le plus répandu actuellement. Certains ne trouveront d'intérêt que pour moi tandis que d'autres pourront satisfaire un plus grand nombre de lecteurs.\\
 \\
-Le choix de `noweb` provient du simple fait que documentation et sources sont conçus en même temps.}
+Le choix de `noweb` provient du simple fait que documentations et sources sont conçus en même temps.}
 
 \tableofcontents
