@@ -67,6 +67,7 @@ bc5o/
 /BccW32.cfg
 /bc5lib.ide
 .zedstate
+.anjuta_sym_db.db
 
 # latex
 *.aux
