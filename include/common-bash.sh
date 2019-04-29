@@ -37,14 +37,17 @@ function get_tmp_file() {
 }
 
 function dohelp() {
-    local exit_value=0
+    local exit_value=
     local error_message=
 
     case "$#" in
+        '0')
+            exit_value=0
+            ;;
         '1')
             exit_value=$1
             ;;
-        '2')
+        *)
             exit_value=$1
             shift
             error_message="$*"

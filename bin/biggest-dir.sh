@@ -7,9 +7,12 @@ help_text="${script_name} [-h|--help] : this message
 ${script_name} dir dir ... : search biggest directory in each of the dir\n"
 
 # directory where this script is
-[ -z "${bindir}" ] && bindir="$(cd $(dirname $0) || exit 1; pwd)"
+bindir="$(cd $(dirname $0) || exit 1; pwd)"
+basedir=$(dirname ${bindir})
+tosource="${basedir}/include/common-bash.sh"
 # source tools
-[ -f "${bindir}/include/common-bash.sh" ] && source ${bindir}/include/common-bash.sh
+[ -f "${tosource}" ] \
+    && source ${tosource}
 
 # we don't use aliases
 DU=$(which du)
